@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 
 import SearchForm from './SearchForm';
 import GeocodeResult from './GeocodeResult';
 import Map from './Map';
 
-const GEOCODE_ENDPOINT = 'https://maps.googleapis.com/maps/api/geocode/json';
+import { geocode } from '../domain/Geocoder';
 
 class App extends Component {
   constructor(props) {
@@ -29,32 +28,25 @@ class App extends Component {
   }
 
   handlePlaceSubmit(place) {
-    // call API.
-    axios
-      .get(GEOCODE_ENDPOINT, { params: { address: place } })
-      .then(results => {
-        const data = results.data;
-        const result = data.results[0];
-        switch (data.status) {
-          case 'OK': {
-            this.setState({
-              address: result.formatted_address,
-              location: result.geometry.location,
-            });
-            break;
-          }
-          case 'ZERO_RESULTS': {
-            this.setErrorMessage('結果が見つかりませんでした');
-            break;
-          }
-          default: {
-            this.setErrorMessage('エラーが発生しました');
-          }
+    geocode(place) // call Google Map API.
+    .then(({ status, address, location }) => {
+      switch (status) {
+        case 'OK': {
+          this.setState({ address, location});
+          break;
         }
-      })
-      .catch(() => {
-        this.setErrorMessage('通信に失敗しました');
-      });
+        case 'ZERO_RESULTS': {
+          this.setErrorMessage('結果が見つかりませんでした');
+          break;
+        }
+        default: {
+          this.setErrorMessage('エラーが発生しました');
+        }
+      }
+    })
+    .catch(() => {
+      this.setErrorMessage('通信に失敗しました');
+    });
   }
 
   render() {
