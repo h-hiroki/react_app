@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-const HotelsclickableTh = ({ label, sortKey, isSelected, onSort }) => (
+import { setSortKey }  from '../actions/';
+
+const HotelsclickableTh = props => (
   <th
     className="hotels-clickable-th"
-    onClick={() => onSort(sortKey)}
+    onClick={() => props.setSortKey(props.sortKey)}
   >
-    {label}{isSelected ? '▲' : ''}
+    {props.label}{props.isSelected ? '▲' : ''}
   </th>
 );
 
@@ -14,7 +17,13 @@ HotelsclickableTh.propTypes = {
   label: PropTypes.string.isRequired,
   sortKey: PropTypes.string.isRequired,
   isSelected: PropTypes.bool.isRequired,
-  onSort: PropTypes.func.isRequired,
+  setSortKey: PropTypes.func.isRequired,
 };
 
-export default HotelsclickableTh;
+export default connect(
+  (state, ownProps) => ({
+    isSelected: ownProps.sortKey === state.sortKey,
+  }),
+  { setSortKey },
+)(HotelsclickableTh);
+
