@@ -17,7 +17,7 @@ HotelsRow.propTypes = {
     name: PropTypes.string,
     url: PropTypes.string,
     thumbUrl: PropTypes.string,
-    price: PropTypes.string,
+    price: PropTypes.number,
     reviewAverage: PropTypes.number,
     reviewCount: PropTypes.number,
     distance: PropTypes.number,
