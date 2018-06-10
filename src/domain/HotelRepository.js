@@ -1,8 +1,7 @@
 import geolib from 'geolib';
 
 import Rakuten from '../lib/Rakuten';
-
-const RAKUTEN_APP_ID = '1078806541309232340';
+import { RAKUTEN_APP_ID } from '../lib/ApiKey';
 
 // eslint-disable-next-lite  import/prefer-default-export
 export const searchHotelByLocation = (location) => {
